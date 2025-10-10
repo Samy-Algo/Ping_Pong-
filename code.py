@@ -20,7 +20,7 @@ display.set_caption("Ping Pong")
 clock = time.Clock()
 FPS = 60
 
-
+run = True
 while run:
     for e in event.get():
         if e.type == QUIT:
