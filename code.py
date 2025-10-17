@@ -1,6 +1,12 @@
 # type: ignore
 from pygame import* 
 
+
+font.init()
+font_1 = font.SysFont("Arial", 75)
+win_l = font_1.render("Left Player WON !!", True, (0, 0, 0))
+win_r = font_1.render("Right Player WON !!", True, (0, 0, 0))
+
 class GameSprite(sprite.Sprite):
     def __init__(self, filename, width, height, x, y, speed):
         super().__init__()
@@ -47,29 +53,39 @@ ball = GameSprite("tenis_ball.png", 40, 40, 300, 200, 0)
 
 speed_x, speed_y = 3, 3
 
+finish = False
 run = True
 while run:
     for e in event.get():
         if e.type == QUIT:
             run = False
 
-    window.fill(BACKGROUND)
-    player_r.reset()
-    player_l.reset()
-    ball.reset()
-    
-    ball.rect.x += speed_x
-    ball.rect.y += speed_y
-    
-    if ball.rect.y > win_height - 40 or ball.rect.y < 0:
-        speed_y *= -1
-    
+    if not finish:
+        window.fill(BACKGROUND)
+        player_r.reset()
+        player_l.reset()
+        ball.reset()
+        
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+        
+        if ball.rect.y > win_height - 40 or ball.rect.y < 0:
+            speed_y *= -1
+        
 
-    if sprite.collide_rect(player_l, ball) or sprite.collide_rect(ball, player_r):
-        speed_x *= -1
+        if sprite.collide_rect(player_l, ball) or sprite.collide_rect(ball, player_r):
+            speed_x *= -1
 
-    player_r.update_r()
-    player_l.update_l()
+        if ball.rect.x > win_width:
+            window.blit(win_l, (110, 150))
+            finish = True
+
+        if ball.rect.x < 0:
+            window.blit(win_r, (110, 150))
+            finish = True
+
+        player_r.update_r()
+        player_l.update_l()
 
     
     display.update()
